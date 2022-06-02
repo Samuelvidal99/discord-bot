@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: python.dockerfile
+    command: python scripts/main.py
+    ports: 
+     - 8000:8000
+    volumes: 
+     - .:/app
+    network_mode: host
+    stdin_open: true
+    tty: true
