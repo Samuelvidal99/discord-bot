@@ -1,4 +1,4 @@
 discord.py
 python-dotenv==0.19.2
 PyNaCl
-ffmpeg
+ffmpeg-python

@@ -3,47 +3,64 @@ from discord.ext import commands
 import os
 from dotenv import load_dotenv
 import ffmpeg
+from utils import *
+from time import sleep
+import json
+from random import randrange
 
 load_dotenv()
 
-def get_voice_client_member(channel, voice_clients):
-    for voice_client in voice_clients:
-        if voice_client.channel.id == channel.id:
-            return voice_client
 
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
-bot = commands.Bot(command_prefix=';;')
+bot = commands.Bot(command_prefix='$')
+
+user_greeting = True
+data = {}
+with open('./data/data.json') as file:
+    data = json.load(file)
 
 @bot.event
 async def on_ready():
     guild_count = 0
 
     for guild in bot.guilds:
-        global servidor
+        global servidor 
         servidor = guild
-
         guild_count = guild_count + 1
         print(f"- {guild.id} (name: {guild.name})")
 
-    print("SampleDiscordBot is in " + str(guild_count) + " guilds.")
+    print("ZapZapBot is in " + str(guild_count) + " guilds.")
 
-# @bot.event
-# async def on_voice_state_update( member : discord.Member, before : discord.VoiceState, after : discord.VoiceState):
-#     if member.display_name == "SamuelVidal99":
-#         if before.channel == None:
-#             await member.voice.channel.connect()
-#             audio_converted = discord.FFmpegOpusAudio("test.wmv.mp3", executable="./scripts/ffmpeg.exe")
 
-#             global voice_client
-#             voice_client = get_voice_client_member(member.voice.channel, bot.voice_clients)
+@bot.event
+async def on_voice_state_update( member : discord.Member, before : discord.VoiceState, after : discord.VoiceState):
+    if member.id == data['users_id']['vitor']:
+        if before.channel == None:
+            await member.voice.channel.connect()
+            audio_converted = discord.FFmpegOpusAudio("/app/audios/teste.mp4", executable="/app/ffmpeg")
+
+            voice_client = get_voice_client_member(member.voice.channel, bot.voice_clients)
+
+            sleep(2)
+            voice_client.play(audio_converted)
+            sleep(16)
+            voice_client.disconnect()
             
-#             # voice_client.play(audio_converted)
-#             print(voice_client.channel)
-#             print(await audio_converted.probe(audio_converted))
-#             print(audio_converted.is_opus())
-#             print(audio_converted.read())
+    else:
+        global user_greeting
+        if (member.id != bot.user.id) and user_greeting:
+            if before.channel == None:
+                guild = get_guild(member.voice.channel, bot.guilds)
+                sleep(2)
+                index = randrange(0,3)
+                message = data["greeting_messages"][index]
+                await guild.text_channels[0].send(
+                    f"{member.name} {message}", 
+                    tts=True, 
+                    delete_after=10.0
+                )
 
 @bot.command()
 async def clear(ctx, amount = 11):
@@ -51,26 +68,31 @@ async def clear(ctx, amount = 11):
 
 
 @bot.command()
-async def test(ctx):
-    await ctx.channel.send("Teste Louco")
+async def zapzap(ctx):
+    # if not bot.voice_clients[0].is_connected():
+    #     await servidor.voice_channels[0].connect()
+    
 
-@bot.command()
-async def teste(ctx):
     await servidor.voice_channels[0].connect()
 
-    print(servidor.voice_channels)
-
-    print("teste")
-
-    audio_converted = discord.FFmpegOpusAudio(source="teste.wmv.mp3", executable="./ffmpeg.exe")
+    audio_converted = discord.FFmpegOpusAudio(source="/app/audios/teste.mp4", executable="/app/ffmpeg")
 
     print(audio_converted.read())
     print(audio_converted.is_opus())
     bot.voice_clients[0].play(audio_converted)
 
-    print(bot.voice_clients[0].is_playing())
+
+    # await bot.voice_clients[0].disconnect()
 
     print("teste")
 
+@bot.command()
+async def user_greeting(ctx, *, message):
+    global user_greeting
+
+    if message == "True":
+        user_greeting = True
+    elif message == "False":
+        user_greeting = False
 
 bot.run(DISCORD_TOKEN)
