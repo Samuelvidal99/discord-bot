@@ -46,7 +46,7 @@ async def on_voice_state_update( member : discord.Member, before : discord.Voice
             sleep(2)
             voice_client.play(audio_converted)
             sleep(16)
-            voice_client.disconnect()
+            await voice_client.disconnect()
             
     else:
         global user_greeting
@@ -62,6 +62,7 @@ async def on_voice_state_update( member : discord.Member, before : discord.Voice
                     delete_after=10.0
                 )
 
+
 @bot.command()
 async def clear(ctx, amount = 11):
     await ctx.channel.purge(limit = amount)
@@ -71,12 +72,13 @@ async def clear(ctx, amount = 11):
 async def zapzap(ctx):
     # if not bot.voice_clients[0].is_connected():
     #     await servidor.voice_channels[0].connect()
-    voice_channel = ctx.guild.voice_channels[1]
-    print("voice_channel: ", voice_channel.name)
-    members = voice_channel.members
-    print("members: ", members)
-    member = members[0]
-    print("member: ", member.name)
+    voice_channel = get_voice_channel_author(ctx)
+
+    await ctx.channel.send(data["messages"]["zapzap_command"])
+    await ctx.channel.send("https://tenor.com/view/zap-gif-21159482")
+    audio_converted = discord.FFmpegOpusAudio(source="/app/audios/zapzap.mp4", executable="/app/ffmpeg")
+    await bot.guilds[1].voice_channels[0].connect()
+    bot.voice_clients[0].play(audio_converted)
     # voice_channel = get_voice_channel_author(ctx)
     # await voice_channel.connect()
 
@@ -92,6 +94,13 @@ async def zapzap(ctx):
 
     # await bot.voice_clients[0].disconnect()
 
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandInvokeError):
+        await ctx.channel.send(
+            data["errors"]["author_not_found_through_voice_channel"],
+            delete_after=10.0
+        )
 
 @bot.command()
 async def user_greeting(ctx, *, message):
