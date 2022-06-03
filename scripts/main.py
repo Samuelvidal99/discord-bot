@@ -71,20 +71,27 @@ async def clear(ctx, amount = 11):
 async def zapzap(ctx):
     # if not bot.voice_clients[0].is_connected():
     #     await servidor.voice_channels[0].connect()
-    
+    voice_channel = ctx.guild.voice_channels[1]
+    print("voice_channel: ", voice_channel.name)
+    members = voice_channel.members
+    print("members: ", members)
+    member = members[0]
+    print("member: ", member.name)
+    # voice_channel = get_voice_channel_author(ctx)
+    # await voice_channel.connect()
 
-    await servidor.voice_channels[0].connect()
 
-    audio_converted = discord.FFmpegOpusAudio(source="/app/audios/teste.mp4", executable="/app/ffmpeg")
+    # await servidor.voice_channels[0].connect()
 
-    print(audio_converted.read())
-    print(audio_converted.is_opus())
-    bot.voice_clients[0].play(audio_converted)
+    # audio_converted = discord.FFmpegOpusAudio(source="/app/audios/teste.mp4", executable="/app/ffmpeg")
+
+    # print(audio_converted.read())
+    # print(audio_converted.is_opus())
+    # bot.voice_clients[0].play(audio_converted)
 
 
     # await bot.voice_clients[0].disconnect()
 
-    print("teste")
 
 @bot.command()
 async def user_greeting(ctx, *, message):
