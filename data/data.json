@@ -8,12 +8,14 @@
         "acabou de entrar na call e é cheirosinho."
     ],
     "messages": {
-        "zapzap_command": ":rofl::rolling_on_the_floor_laughing::rofl::rolling_on_the_floor_laughing::sunglasses::sunglasses:oLhA o ZAPZAP!!!!!:sunglasses::sunglasses::rofl::rolling_on_the_floor_laughing::rofl::rolling_on_the_floor_laughing:"
+       "zapzap_command": ":rofl::rolling_on_the_floor_laughing::rofl::rolling_on_the_floor_laughing::sunglasses::sunglasses:oLhA o ZAPZAP!!!!!:sunglasses::sunglasses::rofl::rolling_on_the_floor_laughing::rofl::rolling_on_the_floor_laughing:"
     },
     "gifs": [
-        "https://tenor.com/view/zap-gif-21159482"
+        "https://tenor.com/view/zap-gif-21159482",
+        "https://tenor.com/view/hulk-dancing-zap-3d-gif-14556535",
+        "https://tenor.com/view/lizard-salamander-gecko-dance-gif-16187825"
     ],
     "errors": {
-        "author_not_found_through_voice_channel": "O ZapZap não conseguiu te achar :sob::sob::sneezing_face::sneeze::punch::punch:, você está em um VoiceChannel? se sim tente sair e entrar novamente."
+        "author_not_found_through_voice_channel": "O ZapZap não conseguiu te achar :sob::sob::sneezing_face::sneeze::punch::punch:, você está em um VoiceChannel??? se sim tente sair e entrar novamente."
     }
 }

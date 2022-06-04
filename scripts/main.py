@@ -70,29 +70,22 @@ async def clear(ctx, amount = 11):
 
 @bot.command()
 async def zapzap(ctx):
-    # if not bot.voice_clients[0].is_connected():
-    #     await servidor.voice_channels[0].connect()
     voice_channel = get_voice_channel_author(ctx)
 
-    await ctx.channel.send(data["messages"]["zapzap_command"])
-    await ctx.channel.send("https://tenor.com/view/zap-gif-21159482")
+    await voice_channel.connect()
     audio_converted = discord.FFmpegOpusAudio(source="/app/audios/zapzap.mp4", executable="/app/ffmpeg")
-    await bot.guilds[1].voice_channels[0].connect()
-    bot.voice_clients[0].play(audio_converted)
-    # voice_channel = get_voice_channel_author(ctx)
-    # await voice_channel.connect()
 
+    voice_client = get_voice_client_member(voice_channel, bot.voice_clients)
+    voice_client.play(audio_converted)
 
-    # await servidor.voice_channels[0].connect()
+    await ctx.channel.send(data["messages"]["zapzap_command"])
 
-    # audio_converted = discord.FFmpegOpusAudio(source="/app/audios/teste.mp4", executable="/app/ffmpeg")
+    index = randrange(0,len(data["gifs"]))
+    await ctx.channel.send(data["gifs"][index])
 
-    # print(audio_converted.read())
-    # print(audio_converted.is_opus())
-    # bot.voice_clients[0].play(audio_converted)
+    sleep(37)
+    await voice_client.disconnect()
 
-
-    # await bot.voice_clients[0].disconnect()
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -102,6 +95,7 @@ async def on_command_error(ctx, error):
             delete_after=10.0
         )
 
+
 @bot.command()
 async def user_greeting(ctx, *, message):
     global user_greeting
@@ -110,5 +104,6 @@ async def user_greeting(ctx, *, message):
         user_greeting = True
     elif message == "False":
         user_greeting = False
+
 
 bot.run(DISCORD_TOKEN)
